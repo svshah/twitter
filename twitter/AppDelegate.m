@@ -7,6 +7,11 @@
 //
 
 #import "AppDelegate.h"
+#import "LoginViewController.h"
+#import "TwitterClient.h"
+#import "User.h"
+#import "Tweets.h"
+#import "TweetsViewController.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +22,20 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen]bounds]];
+    [self.window makeKeyAndVisible];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidLogout) name:UserDidLogoutNotification object:nil];
+    
+    User *user = [User currentUser];
+    if (user != nil) {
+        NSLog(@"Welcome %@", user.name);
+        //UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:];
+        self.window.rootViewController = [[TweetsViewController alloc] init];
+    } else {
+        NSLog(@"Not logged in");
+        self.window.rootViewController = [[LoginViewController alloc] init];
+    }
     return YES;
 }
 
@@ -40,6 +59,16 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    //passing the openurl to TwitterClient to handle it
+    [[TwitterClient sharedInstance] openUrl:url];
+    return YES;
+}
+
+- (void)userDidLogout {
+    self.window.rootViewController = [[LoginViewController alloc] init];
 }
 
 @end
