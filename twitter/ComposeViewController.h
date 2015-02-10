@@ -12,5 +12,7 @@
 @interface ComposeViewController : UIViewController
 
 @property (nonatomic, strong) User *user;
+@property (strong, nonatomic) IBOutlet UITextField *tweetTextView;
+@property (strong, nonatomic) NSString *replyText;
 
 @end

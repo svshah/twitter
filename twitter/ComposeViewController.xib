@@ -7,7 +7,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ComposeViewController">
             <connections>
                 <outlet property="profileImageView" destination="pTD-gc-92q" id="Woh-56-yG0"/>
-                <outlet property="tweetTextView" destination="bHm-Pf-knc" id="umG-qx-ivF"/>
+                <outlet property="tweetTextView" destination="bHm-Pf-knc" id="Ona-so-rbj"/>
                 <outlet property="twitterHandleLabel" destination="K66-gM-ZFu" id="UWj-JP-Hlk"/>
                 <outlet property="userNameLabel" destination="myP-7Q-7r5" id="4fE-9y-fmX"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>

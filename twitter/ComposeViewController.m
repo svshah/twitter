@@ -11,7 +11,6 @@
 #import "TwitterClient.h"
 
 @interface ComposeViewController ()
-@property (strong, nonatomic) IBOutlet UITextField *tweetTextView;
 @property (strong, nonatomic) IBOutlet UIImageView *profileImageView;
 @property (strong, nonatomic) IBOutlet UILabel *twitterHandleLabel;
 @property (strong, nonatomic) IBOutlet UILabel *userNameLabel;
@@ -29,6 +28,10 @@
     [self.profileImageView setImageWithURL:[NSURL URLWithString:self.user.profileImageUrl]];
     self.userNameLabel.text = self.user.name;
     self.twitterHandleLabel.text = self.user.screenName;
+    if (self.replyText != nil) {
+        self.tweetTextView.text = self.replyText;
+        self.tweetTextView.clearsOnBeginEditing = NO;
+    }
 }
 
 - (void)didReceiveMemoryWarning {

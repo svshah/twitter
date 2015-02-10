@@ -14,7 +14,7 @@
 #import "ComposeViewController.h"
 #import "TweetDetailViewController.h"
 
-@interface TweetsViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface TweetsViewController () <UITableViewDataSource, UITableViewDelegate, TweetCellDelegate>
 
 @property (strong, nonatomic) NSArray *tweets;
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
@@ -74,7 +74,12 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     TweetCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TweetCell"];
     cell.tweet = self.tweets[indexPath.row];
+    cell.delegate = self;
     return cell;
+}
+
+- (void) loadComposeViewController:(UINavigationController *) composeViewController didClickReply:(NSString *)handle {
+    [self presentViewController:composeViewController animated:YES completion:nil];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -84,6 +89,8 @@
     CGSize size = [self.prototypeCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
     return size.height+1;
 }
+
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

@@ -99,4 +99,30 @@ NSString * const kTwitterBaseUrl = @"https://api.twitter.com";
     }];
 }
 
+- (void)retweetForId:(NSInteger)Id completion:(void (^)(NSDictionary *response , NSError *error))completion {
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+    
+    [params  setObject:[NSString stringWithFormat:@"%ld",Id] forKey:@"id"];
+    NSString *retweetUrl = [NSString stringWithFormat:@"1.1/statuses/retweet/%ld.json",Id];
+    [[TwitterClient sharedInstance]POST:retweetUrl parameters:params constructingBodyWithBlock:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        completion(responseObject, nil);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        completion(nil,error);
+    }];
+}
+
+- (void)favoriteForId:(NSInteger)Id completion:(void (^)(NSDictionary *response , NSError *error))completion {
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+    
+    [params  setObject:[NSString stringWithFormat:@"%ld",Id] forKey:@"id"];
+    
+    [[TwitterClient sharedInstance]POST:@"1.1/favorites/create.json" parameters:params constructingBodyWithBlock:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        completion(responseObject,nil);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        completion(nil,error);
+    }];
+}
+
+
+
 @end

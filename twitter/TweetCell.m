@@ -9,6 +9,8 @@
 #import "TweetCell.h"
 #import "UIImageView+AFNetworking.h"
 #import "TTTTimeIntervalFormatter.h"
+#import "ComposeViewController.h"
+#import "TwitterClient.h"
 
 @interface TweetCell()
 @property (strong, nonatomic) IBOutlet UILabel *usernameLabel;
@@ -61,8 +63,55 @@
     self.timeLabel.text = [timeIntervalFormatter stringForTimeInterval:-timeInterval];
     NSLog(@"\n----\ntweet: %@",self.tweet.text);
     [self.replyImageView setImageWithURL:[NSURL URLWithString:@"https://g.twimg.com/dev/documentation/image/reply.png"]];
+    [self.replyImageView setUserInteractionEnabled:YES];
+    UITapGestureRecognizer *replyTap =  [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onReplyClick)];
+    [replyTap setNumberOfTapsRequired:1];
+    [self.replyImageView addGestureRecognizer:replyTap];
+    
+    
+    
     [self.favoriteImageView setImageWithURL:[NSURL URLWithString:@"https://g.twimg.com/dev/documentation/image/favorite.png"]];
+    [self.favoriteImageView setUserInteractionEnabled:YES];
+    UITapGestureRecognizer *singleTap =  [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onFavoriteClick)];
+    [singleTap setNumberOfTapsRequired:1];
+    [self.favoriteImageView addGestureRecognizer:singleTap];
+    
     [self.retweetImageView setImageWithURL:[NSURL URLWithString:@"https://g.twimg.com/dev/documentation/image/retweet.png"]];
+    [self.retweetImageView setUserInteractionEnabled:YES];
+    UITapGestureRecognizer *retweetTap =  [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onRetweetClick)];
+    [retweetTap setNumberOfTapsRequired:1];
+    [self.retweetImageView addGestureRecognizer:retweetTap];
+}
+
+- (void)onReplyClick {
+    
+    ComposeViewController *cv = [[ComposeViewController alloc] init];
+    cv.replyText = [NSString stringWithFormat:@"@%@",self.tweet.user.screenName];
+    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:cv];
+ //   [self presentViewController:nvc animated:YES completion:nil];
+    [self.delegate loadComposeViewController:nvc didClickReply:self.tweet.user.screenName];
+}
+
+- (void)onFavoriteClick {
+    [[TwitterClient sharedInstance]favoriteForId:self.tweet.id completion:^(NSDictionary *response, NSError *error) {
+        if (response != nil) {
+            NSLog(@"response=%@",response);
+            self.tweet.favoriteCount++;
+            //self.favoriteLabel.text = [NSString stringWithFormat:@"%ld", self.tweet.favoriteCount];
+            [self.favoriteImageView setImageWithURL:[NSURL URLWithString:@"https://g.twimg.com/dev/documentation/image/favorite_on.png"]];
+        }
+    }];
+}
+
+- (void)onRetweetClick {
+    [[TwitterClient sharedInstance]retweetForId:self.tweet.id completion:^(NSDictionary *response, NSError *error) {
+        if (response != nil) {
+            NSLog(@"response=%@",response);
+            self.tweet.retweetCount++;
+            //self.retweetLabel.text = [NSString stringWithFormat:@"%ld", self.tweet.retweetCount];
+            [self.retweetImageView setImageWithURL:[NSURL URLWithString:@"https://g.twimg.com/dev/documentation/image/retweet_on.png"]];
+        }
+    }];
 }
 
 @end
