@@ -77,14 +77,26 @@ NSString * const kTwitterBaseUrl = @"https://api.twitter.com";
 
 - (void)homeTimelineWithParams:(NSDictionary *)params completion:(void (^)(NSArray *tweets, NSError *error))completion {
     [self GET:@"1.1/statuses/home_timeline.json" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        //NSLog(@"Response %@",responseObject);
+        NSLog(@"Response %@",responseObject);
         NSArray *tweetsArray = [Tweets tweetsWithArray:responseObject];
         completion(tweetsArray, nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"error %@",error);
         completion(nil, error);
     }];
+}
 
+- (void)updateStatus:(NSString *)status completion:(void (^)(NSDictionary *response , NSError *error))completion {
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+    
+    [params  setObject:status forKey:@"status"];
+    [self POST:@"1.1/statuses/update.json" parameters:params constructingBodyWithBlock:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"tweet %@ composed",status);
+        completion(responseObject, nil);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error %@",error);
+        completion(nil,error);
+    }];
 }
 
 @end

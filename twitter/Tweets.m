@@ -20,6 +20,9 @@
         self.user = [[User alloc] initWithDictionary:dictionary[@"user"]];
         self.text = dictionary[@"text"];
         self.createdAt = [formatter dateFromString:dictionary[@"created_at"]];
+        self.retweetCount = [dictionary[@"retweet_count"] integerValue];
+        self.favoriteCount = [dictionary[@"favorite_count"] integerValue];
+        self.id = [dictionary[@"id"] integerValue];
      }
     return self;
 }

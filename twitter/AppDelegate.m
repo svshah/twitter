@@ -31,10 +31,10 @@
     if (user != nil) {
         NSLog(@"Welcome %@", user.name);
         //UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:];
-        self.window.rootViewController = [[TweetsViewController alloc] init];
+        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[TweetsViewController alloc] init]];
     } else {
         NSLog(@"Not logged in");
-        self.window.rootViewController = [[LoginViewController alloc] init];
+        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
     }
     return YES;
 }
@@ -68,7 +68,7 @@
 }
 
 - (void)userDidLogout {
-    self.window.rootViewController = [[LoginViewController alloc] init];
+    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
 }
 
 @end
